@@ -2,6 +2,7 @@ mod camera;
 mod input;
 mod scheduling;
 mod state;
+mod tank;
 
 use avian3d::prelude::*;
 use bevy::{asset::AssetMetaCheck, prelude::*};
@@ -9,6 +10,8 @@ use camera::CameraPlugin;
 use input::GameInputPlugin;
 use scheduling::SchedulingPlugin;
 use state::StatePlugin;
+
+use crate::tank::TankPlugin;
 
 
 const APP_NAME: &str = "Tanks";
@@ -43,25 +46,27 @@ fn main() {
         GameInputPlugin,
         SchedulingPlugin,
         StatePlugin,
+        TankPlugin,
       ))
       .add_systems(Startup, initialize)
       .run();
 }
 
-fn initialize(mut commands:Commands,
- mut meshes: ResMut<Assets<Mesh>>,
+fn initialize(
+    mut commands:Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
   ){
 
  // Static physics object with a collision shape
     commands.spawn((
         RigidBody::Static,
-        Collider::cylinder(5.0, 0.1),
-        Mesh3d(meshes.add(Cylinder::new(5.0, 0.1))),
+        Collider::cylinder(25.0, 0.1),
+        Mesh3d(meshes.add(Cylinder::new(25.0, 0.1))),
         MeshMaterial3d(materials.add(Color::WHITE)),
     ));
 
-
+/*
 for i in (0..200){
 commands.spawn((
         RigidBody::Dynamic,
@@ -72,7 +77,7 @@ commands.spawn((
         Transform::from_xyz(0.0, i as f32 * 0.5, 0.0),
     ));
 }
-
+ */
     // Dynamic physics object with a collision shape and initial angular velocity
     
 
@@ -88,7 +93,7 @@ commands.spawn((
     // Camera
     commands.spawn((
         Camera3d::default(),
-        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Dir3::Y),
+        Transform::from_xyz(-10., 6., 20.).looking_at(Vec3::ZERO, Dir3::Y),
     ));
 
 }
